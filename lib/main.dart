@@ -1,0 +1,75 @@
+import 'package:dropdown_country/controllers/home_controller.dart';
+import 'package:dropdown_country/models/country.dart';
+import 'package:dropdown_country/widgets/country_selector.dart';
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        // This is the theme of your application.
+        //
+        // Try running your application with "flutter run". You'll see the
+        // application has a blue toolbar. Then, without quitting the app, try
+        // changing the primarySwatch below to Colors.purple and then invoke
+        // "hot reload" (press "r" in the console where you ran "flutter run",
+        // or simply save your changes to "hot reload" in a Flutter IDE).
+        // Notice that the counter didn't reset back to zero; the application
+        // is not restarted.
+        primarySwatch: Colors.blue,
+      ),
+      home: const HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final controller = HomeController();
+
+  @override
+  void initState() {
+    setState(() {
+      controller.setCountry(controller.countries[0]);
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: DropdownButton(
+          value: controller.initial,
+          items: controller.countries.map((country) {
+            return DropdownMenuItem(
+              value: country,
+              child: CountrySelector(country: country),
+            );
+          }).toList(),
+          onChanged: (Country? value) {
+            setState(() {
+              controller.setCountry(value!);
+            });
+          },
+        ),
+      ),
+    );
+  }
+}
